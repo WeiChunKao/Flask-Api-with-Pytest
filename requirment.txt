@@ -1,0 +1,9 @@
+pip==20.2.4
+requests==2.24.0
+flask==1.1.2
+gunicorn==20.0.4
+gevent==20.9.0
+Flask-Cors==3.0.10
+flask-restplus
+werkzeug==0.16.0
+pytest
