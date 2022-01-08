@@ -1,7 +1,7 @@
 # api
 transfer
 # Python Flask Api
-when run api server，you will see swagger on http://localhost:5000
+when run api server，you will see swagger on http://localhost:5000。
 suggest using gunicorn( gunicorn -c ./gunicorn.conf.py app:app)
 # Dockerfile
 sudo docker build -t api:v1.0.0 .
