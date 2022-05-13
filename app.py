@@ -3,18 +3,19 @@
 from re import template
 from flask import Flask, jsonify, Blueprint, render_template
 from flask import request
-from flask_restplus import Api, Resource, fields, reqparse, inputs
+from flask_restx  import Api, Resource, fields, reqparse, inputs
 from flask_cors import CORS
 from datetime import datetime
-from common import Base
+from common import Base,apiLoginProcess
 from transfer import Transfer
+from endpoints import api as account_ns
 import os
 import sys
 app = Flask(__name__)
 api = Api(app, version='1.0', title='DataProvider API',
           description='KPI資料提供'
           )
-# app.register_blueprint(blueprint)
+api.add_namespace(account_ns)
 CORS(app, supports_credentials=True, cors_allowed_origins='*')
 
 
@@ -24,7 +25,10 @@ transferML = api.model('transfer', {
     'target': fields.String(required=True, description='目標幣別', default="TWD", example="TWD"),
     'amount': fields.Integer(required=True, description='⾦額數字', default=1, example=1),
 })
-
+transferReturnML = api.model('transferReturnML', {
+    "Result":fields.String(required=True, description=''),
+    "Reason":fields.String(required=True, description="")
+})
 
 @transferNs.route('', methods=['POST'])
 @transferNs.response(200, 'Sucess')
@@ -40,6 +44,8 @@ transferML = api.model('transfer', {
 class transfer(Resource):
     @transferNs.doc('取得參數')
     @transferNs.expect(transferML)
+    @transferNs.marshal_with(transferReturnML)
+    @apiLoginProcess
     def post(self):
         if not request:
             abort(400)
