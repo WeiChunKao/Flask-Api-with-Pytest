@@ -1,6 +1,7 @@
 import json
-
-
+from flask import request
+from typing import Any
+from functools import wraps
 class Base():
     @staticmethod
     def getheader():
@@ -32,3 +33,19 @@ class Base():
                 }
             }
         }
+
+def apiLoginProcess(func: Any) -> Any:
+    """[summary]
+    處理驗證
+    Args:
+        func ([type]): 方法
+    Returns:
+        Any: 回傳、狀態碼、Header
+    """
+    @wraps(func)
+    def wrapper(*args: tuple, **kwargs: dict) -> Any:
+        print(f"args:{args}")
+        print(f"kwargs:{kwargs}")
+        print(request.json)
+        #return func(*args, **kwargs)
+    return wrapper
